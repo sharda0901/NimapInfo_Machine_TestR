@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MVC_Nimap_MachineTest.Models.ProductReportModel>
+
+@{
+    Layout = null;
+    var pager = new MVC_Nimap_MachineTest.Models.Pager();
+    int PageNo = 0;
+    if (ViewBag.pager != null)
+    {
+        pager = ViewBag.pager;
+        PageNo = pager.CurrentPage;
+    }
+
+}
+<head>
+    <script src="~/Content/js/datatables-simple-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/Content/js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+</head>
+<table id="datatablesSimple">
+    <tr class="bg-primary">
+        <th>
+            Product Id
+        </th>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Category Name
+        </th>
+        <th>
+            Category Id
+        </th>
+        <th>Edit/Delete</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditData", new { id = item.ProductId }) |
+                @Html.ActionLink("Delete", "ReportDelete", new { id = item.ProductId })
+            </td>
+        </tr>
+    }
+    </table>
+
+<div class="container">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+
+            @if (pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", "Product", new { pg = 1 })">First</a>
+                </li>
+                <li>
+                    <a class="page-link" href="@Url.Action("Index", "Product", new { pg = pager.CurrentPage - 1 })">Previous</a>
+                </li>
+            }
+
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Product", new { pg = pge })">@pge</a>
+                </li>
+            }
+
+            @if (pager.CurrentPage < pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", "Product", new { pg = pager.CurrentPage + 1 })">First</a>
+                </li>
+                <li>
+                    <a class="page-link" href="@Url.Action("Index", "Product", new { pg = pager.TotalPages })">Last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+   
+
